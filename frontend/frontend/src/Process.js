@@ -29,10 +29,9 @@ function Process({ processedView }) {
   tableRows = makeTableRows(processedView.content);
 
   return (
-    <>
-      <p style={{ color: "beige" }}>{processedView.columns}</p>
+    <div>
       {tableRows.length != 0 ? (
-        <div style={{ height: 400, width: "100%" }}>
+        <div style={{ height: 400, width: 768 }}>
           <DataGrid
             rows={tableRows}
             columns={tableCols}
@@ -44,7 +43,7 @@ function Process({ processedView }) {
       ) : (
         <h2>loading...</h2>
       )}
-    </>
+    </div>
   );
 }
 export default Process;

@@ -1,6 +1,5 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
 
 import CSVReaderApi from "./api";
 import Preview from "./Preview";
@@ -20,37 +19,31 @@ function App() {
 
   const handlePreviewClick = async (event) => {
     event.preventDefault();
-    // console.log("preview clicked");
     setButtonStatus("preview");
-    let data = await CSVReaderApi.sendGetPreviewRequest();
+    let data = await CSVReaderApi.sendGetPreviewRequest(inputFilePath);
     setPreview(data);
   };
 
   const handleProcessClick = async (event) => {
     event.preventDefault();
-    // console.log("process clicked");
     setButtonStatus("process");
-    let data = await CSVReaderApi.sendProcessRequest();
+    let data = await CSVReaderApi.sendProcessRequest(inputFilePath);
     setProcessedView(data);
   };
 
   const handleInsightClick = async (event) => {
     event.preventDefault();
-    // console.log("process clicked");
     setButtonStatus("insight");
   };
+
+  const handleInputChange = (event) => {
+    setInputFilePath(event.target.value);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h2>CSV Reader</h2>
-        {/* <Box
-          sx={{
-            width: 500,
-            maxWidth: "100%",
-          }}
-        >
-          <PieChart />
-        </Box> */}
         <Box
           sx={{
             width: 500,
@@ -63,6 +56,7 @@ function App() {
             variant="outlined"
             fullWidth
             margin="normal"
+            onChange={handleInputChange}
           />
         </Box>
         <Stack spacing={4} direction="row">

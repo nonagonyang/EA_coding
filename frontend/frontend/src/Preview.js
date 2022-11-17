@@ -30,10 +30,8 @@ function Preview({ preview }) {
   tableRows = makeTableRows(preview.content);
 
   return (
-    <>
-      <p style={{ color: "beige" }}>{preview.columns}</p>
-
-      <div style={{ height: 400, width: "100%" }}>
+    <div>
+      <div style={{ height: 400, width: 768 }}>
         <DataGrid
           rows={tableRows}
           columns={tableCols}
@@ -42,7 +40,7 @@ function Preview({ preview }) {
           rowsPerPageOptions={[6]}
         />
       </div>
-    </>
+    </div>
   );
 }
 export default Preview;

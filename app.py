@@ -1,15 +1,13 @@
 import grequests
 import csv
 
-
 from flask import Flask
 from flask import jsonify 
+from flask import request
 from flask_cors import CORS #comment this on deployment
 
 app = Flask(__name__)
 CORS(app) #comment this on deployment
-
-numRowsPreview=6
 
 # instead of making API calls one at a time
 # create a set of unsent Requests
@@ -21,22 +19,29 @@ uniquePostcode=set()
 # Tune this according to the rate request threshold specified 
 # or that makes sense for the PRIZM endpoint
 MAX_CONCURRENT_REQUESTS = 20
+SAMPLE_CSV = "customerInfo.csv"
+NUM_ROWS_PREVIEW=6
+
 prizmCodeRequests = {}
 prizmUrlToPostcodeLookup = {}
 postcodeToSegmentMap={}
-
 allSegmentCodes=[]
 segmentCodeCounts={}
 
 @app.route("/preview")
 def preview():
+    csvPath = request.args.get('csvfile')
+    if csvPath is None or csvPath == '':
+        csvPath=SAMPLE_CSV
+    
+
     rows = []
-    with open("customerInfo.csv", 'r') as file:
+    with open(csvPath, 'r') as file:
         csvreader = csv.reader(file)
         header = next(csvreader)
         counter=0
         for row in csvreader:
-            while counter < numRowsPreview:
+            while counter < NUM_ROWS_PREVIEW:
                 rows.append(row)
                 counter+=1
     return {
@@ -46,8 +51,12 @@ def preview():
 
 @app.route("/process")
 def process():
+    csvPath = request.args.get('csvfile')
+    if csvPath is None or csvPath =='':
+        csvPath=SAMPLE_CSV
+    
     rows = []
-    with open("customerInfo.csv", 'r') as file:
+    with open(csvPath, 'r') as file:
         csvreader = csv.reader(file)
         header = next(csvreader)
         header.append("PRIZM Code")
@@ -66,7 +75,7 @@ def process():
           
         #send PRIZM request urls in batches
         sendGRequests(urls) 
-        # print(postcodeToSegmentMap)
+    
 
     with open("customerInfo.csv", 'r') as file:
         csvreader = csv.reader(file)
@@ -82,7 +91,7 @@ def process():
             else:
                 row.append(-1)
             rows.append(row)
-        counts=makeSegmentCodeCounts(allSegmentCodes)
+        makeSegmentCodeCounts(allSegmentCodes)
 
     return {
         "columns" : header,

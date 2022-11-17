@@ -1,24 +1,27 @@
 import axios from "axios";
 
 class CSVReaderApi {
-  static async sendGetPreviewRequest() {
+  static async sendGetPreviewRequest(csvPath) {
     try {
-      const resp = await axios.get("http://localhost:5000/preview");
-      //   console.log(resp.data);
+      const resp = await axios.get(
+        `http://localhost:5000/preview?csvfile=${csvPath}`
+      );
+
       return resp.data;
     } catch (err) {
       // Handle Error Here
-      console.error(err);
+      return [];
     }
   }
-  static async sendProcessRequest() {
+  static async sendProcessRequest(csvPath) {
     try {
-      const resp = await axios.get("http://localhost:5000/process");
-      //   console.log(resp.data);
+      const resp = await axios.get(
+        `http://localhost:5000/process?csvfile=${csvPath}`
+      );
       return resp.data;
     } catch (err) {
       // Handle Error Here
-      console.error(err);
+      return [];
     }
   }
 }
