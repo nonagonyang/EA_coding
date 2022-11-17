@@ -1,6 +1,6 @@
 import grequests
 import csv
-import requests
+
 
 from flask import Flask
 from flask_cors import CORS #comment this on deployment
