@@ -10,7 +10,7 @@ function Preview({ preview }) {
       tableCols.push({
         field: columns[headerName],
         headerName: columns[headerName],
-        width: 200,
+        width: 130,
       });
     }
     console.log(tableCols);
@@ -31,7 +31,7 @@ function Preview({ preview }) {
 
   return (
     <>
-      <h2>{preview.columns}</h2>
+      <p style={{ color: "beige" }}>{preview.columns}</p>
 
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid

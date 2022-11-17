@@ -3,6 +3,7 @@ import csv
 
 
 from flask import Flask
+from flask import jsonify 
 from flask_cors import CORS #comment this on deployment
 
 app = Flask(__name__)
@@ -23,6 +24,9 @@ MAX_CONCURRENT_REQUESTS = 20
 prizmCodeRequests = {}
 prizmUrlToPostcodeLookup = {}
 postcodeToSegmentMap={}
+
+allSegmentCodes=[]
+segmentCodeCounts={}
 
 @app.route("/preview")
 def preview():
@@ -71,15 +75,36 @@ def process():
         for row in csvreader:
             currentPostCode=row[2]
             if currentPostCode in postcodeToSegmentMap:
-                row.append(postcodeToSegmentMap[currentPostCode])
+                segmentCode=postcodeToSegmentMap[currentPostCode]
+                row.append(segmentCode)
+                allSegmentCodes.append(segmentCode)
+
             else:
                 row.append(-1)
             rows.append(row)
+        counts=makeSegmentCodeCounts(allSegmentCodes)
 
     return {
-  "columns" : header,
-  "content" : rows
-}
+        "columns" : header,
+        "content" : rows
+        }
+
+
+
+def makeSegmentCodeCounts(allSegmentCodes):
+    if allSegmentCodes:
+        for code in allSegmentCodes:
+            if (code in segmentCodeCounts):
+                segmentCodeCounts[code] = (segmentCodeCounts[code] + 1)
+            else:
+                segmentCodeCounts[code]=1   
+        print(segmentCodeCounts)
+        return  segmentCodeCounts
+    else:
+        pass
+
+
+
 
 #call the PRIZM API
 def constructUrl(postcode):

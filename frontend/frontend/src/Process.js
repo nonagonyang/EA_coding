@@ -10,7 +10,7 @@ function Process({ processedView }) {
       tableCols.push({
         field: columns[headerName],
         headerName: columns[headerName],
-        width: 200,
+        width: 130,
       });
     }
     return tableCols;
@@ -30,7 +30,7 @@ function Process({ processedView }) {
 
   return (
     <>
-      <h2>{processedView.columns}</h2>
+      <p style={{ color: "beige" }}>{processedView.columns}</p>
       {tableRows.length != 0 ? (
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
